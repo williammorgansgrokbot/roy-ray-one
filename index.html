@@ -313,12 +313,27 @@ html,body{background:radial-gradient(90% 45% at 50% 0%,rgba(255,255,255,.25),tra
 .confetti{position:fixed;inset:0;pointer-events:none;z-index:90;overflow:hidden}
 .confetti i{position:absolute;top:-12px;width:9px;height:14px;border-radius:2px;animation:cfall 2s linear forwards}
 @keyframes cfall{to{top:110%;margin-left:40px}}
-</style><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script><script src="firebase-config.js"></script><script src="royray.js"></script></head><body><div id="floats"></div><div id="app">
-<!-- HOME -->
-<div id="home">
- <div class="panel hero"><div class="rrTop"><div id="heroGlobe" class="rrGlobe"></div><div class="fam">ROY &amp; RAY</div></div><div class="ttl yt">ONE<span class="bang">!</span></div><div class="tagline">Global Solutions, Local Experts</div><div class="rrPhoto"><img id="rrPhoto" alt="Roy and Ray"></div>
+
+/* ===== splash ===== */
+#splash{position:fixed;inset:0;z-index:80;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:calc(env(safe-area-inset-top) + 16px) 14px calc(env(safe-area-inset-bottom) + 16px);cursor:pointer;-webkit-tap-highlight-color:transparent;background:radial-gradient(90% 45% at 50% 0%,rgba(255,255,255,.25),transparent 70%),linear-gradient(180deg,#00a6e0 0%,#0077c8 45%,#00388F 100%);transition:opacity .5s ease,transform .5s ease}
+#splash.leaving{opacity:0;transform:translateY(-40px) scale(1.04);pointer-events:none}
+#splash.gone{display:none}
+body.splashOn{overflow:hidden}body.splashOn #app{opacity:0}
+#app{transition:opacity .5s ease .1s}
+#splash .hero{width:100%;max-width:440px;padding:22px 10px 26px}
+#splash .rrPhoto{width:250px;height:232px}
+#splash .heroCards{height:140px;margin-top:22px}
+#splash .cd.hc{width:72px;margin-left:-36px;animation:hbob 2.4s ease-in-out infinite;animation-delay:calc((var(--i) + 2) * .22s)}
+@keyframes hbob{0%,100%{translate:0 0}50%{translate:0 -18px}}
+.tapHint{margin-top:22px;font-weight:900;letter-spacing:4px;font-size:18px;color:#fff;padding:12px 26px;border-radius:999px;border:2px solid rgba(255,255,255,.8);background:rgba(0,56,143,.35);animation:tpulse 1.6s ease-in-out infinite}
+@keyframes tpulse{0%,100%{opacity:.55;transform:scale(.96)}50%{opacity:1;transform:scale(1.04)}}
+@media (prefers-reduced-motion:reduce){#splash .cd.hc,.tapHint{animation:none}#splash,#app{transition:none}.tapHint{opacity:1}}
+</style><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script><script src="firebase-config.js"></script><script src="royray.js"></script></head><body><div id="floats"></div><div id="splash" role="button" aria-label="Tap to play"><div class="panel hero"><div class="rrTop"><div id="heroGlobe" class="rrGlobe"></div><div class="fam">ROY &amp; RAY</div></div><div class="ttl yt">ONE<span class="bang">!</span></div><div class="tagline">Global Solutions, Local Experts</div><div class="rrPhoto"><img id="rrPhoto" alt="Roy and Ray"></div>
   <div class="divd"><i></i></div><div class="heroCards" id="heroCards"></div>
   <div class="sub" style="margin:12px 0 0">MATCH COLOR OR NUMBER · YELL “ONE!” · EMPTY YOUR HAND</div></div>
+ <div class="tapHint">TAP TO PLAY</div></div><div id="app">
+<!-- HOME -->
+<div id="home">
  <div class="panel stack">
   <div class="seg" id="modeSeg"><button data-m="pp" class="on">PASS &amp; PLAY</button><button data-m="online">ONLINE ROOM</button></div>
   <div id="ppBox">
@@ -651,6 +666,11 @@ function egg(id){var e=$(id),n=0;e.querySelector('.eggBtn').onclick=function(ev)
 ['egg','egg2'].forEach(function(id,k){$(id).querySelector('.eggBtn').innerHTML='<svg class="star" viewBox="0 0 100 100">'+globeSVG(50,50,44,'eg'+k)+'</svg><svg class="hat" viewBox="0 0 100 100">'+globeSVG(50,50,44,'eh'+k,'#E8B21C','#8a5a00')+'</svg><span class="spark"></span>';$(id).querySelector('.eggBtn').setAttribute('aria-label','globe')});
 function confetti(){var cs=['#009FDB','#00388F','#fff','#E8B21C'],b=document.createElement('div');b.className='confetti';for(var i=0;i<60;i++){var p=document.createElement('i');p.style.cssText='left:'+Math.random()*100+'%;background:'+cs[i%4]+';animation-delay:'+Math.random()*.6+'s;animation-duration:'+(1.6+Math.random()*1.2)+'s;transform:rotate('+Math.random()*360+'deg)';b.appendChild(p)}document.body.appendChild(b);setTimeout(function(){b.remove()},3500)}
 egg('egg');egg('egg2');
+(function(){var sp=$('splash'),q=new URLSearchParams(location.search),rc=(q.get('room')||q.get('join')||'').toUpperCase().replace(/[^A-Z]/g,'').slice(0,4);
+ function go(){if(sp.classList.contains('gone'))return;audioInit();sfx('deal');sp.classList.add('leaving');document.body.classList.remove('splashOn');setTimeout(function(){sp.classList.add('gone')},520)}
+ window.RR_SPLASH=go;
+ if(rc.length===4||q.get('nosplash')==='1'){sp.classList.add('gone');if(rc.length===4){$('modeSeg').querySelector('[data-m="online"]').click();$('joinCode').value=rc}}
+ else{document.body.classList.add('splashOn');sp.onclick=go;sp.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' ')go()});sp.tabIndex=0}})();
 // ---------- badges ----------
 var BD=[
  [1,'Welcome Aboard','Play your first game of Roy & Ray ONE!','r','#1f4fa8','boot'],
