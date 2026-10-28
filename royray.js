@@ -5,6 +5,6 @@ window.FAMILY=[
   {place:1,name:'Roy'},{place:2,name:'Ray'},
   {place:3,name:'Marcel'},{place:4,name:'Jeremy'},{place:5,name:'Chris'},{place:6,name:'Michael'},
   {place:7,name:'Derek'},{place:8,name:'David'},{place:9,name:'Bill'},{place:10,name:'Larry'},
-  {place:11,name:''},
+  {place:11,name:'Kenny'},
   {place:12,name:''}
 ];
